@@ -41,6 +41,10 @@ namespace SwiftHR.Models
         public virtual DbSet<AttandancePolicySetup> AttandancePolicySetups { get; set; }
         public virtual DbSet<AuthorizedSignatory> AuthorizedSignatories { get; set; }
         public virtual DbSet<BankMaster> BankMasters { get; set; }
+
+        public virtual DbSet<LookUpM> LookUpM { get; set; }
+        public virtual DbSet<EmpLOPDetails> EmpLOPDetails { get; set; }
+        public virtual DbSet<LookUpDetailsM> LookUpDetailsM { get; set; }
         public virtual DbSet<EmpAddress> EmpAddress { get; set; }
         public virtual DbSet<CurrancyMaster> CurrancyMasters { get; set; }
         public virtual DbSet<Department> Departments { get; set; }
@@ -260,6 +264,86 @@ namespace SwiftHR.Models
                     .HasMaxLength(20)
                     .IsUnicode(false)
                     .HasColumnName("IFSCCODE");
+            });
+
+           
+            modelBuilder.Entity<LookUpM>(entity =>
+            {
+                entity.ToTable("LookUpM");
+
+                entity.HasKey(e => e.LookUpId);
+
+                entity.Property(e => e.LookUpCode)
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.LookUpName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Description)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+            });
+
+
+
+            modelBuilder.Entity<LookUpDetailsM>(entity =>
+            {
+                entity.HasKey(e => e.LookUpDetailsId);
+
+                entity.ToTable("LookUpDetailsM");
+
+                entity.Property(e => e.LookUpDetailsId).HasColumnName("LookUpDetailsId");
+
+                entity.Property(e => e.LookUpId)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("LookUpId");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(250)
+                    .IsUnicode(false)
+                    .HasColumnName("Name");
+
+                entity.Property(e => e.Description)
+                    .HasMaxLength(250)
+                    .IsUnicode(false)
+                    .HasColumnName("Description");
+            });
+
+
+
+             modelBuilder.Entity<EmpLOPDetails>(entity =>
+            {
+                entity.ToTable("EmpLOPDetails");
+
+
+                entity.Property(e => e.EmployeeID)
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.EmployeeNumber)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.EmployeeName)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.LOPMonth)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TotalLOPDays)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Remarks)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
             });
 
 
