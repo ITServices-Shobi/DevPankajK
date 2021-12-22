@@ -44,6 +44,9 @@ namespace SwiftHR.Models
 
         public virtual DbSet<LookUpM> LookUpM { get; set; }
         public virtual DbSet<EmpLOPDetails> EmpLOPDetails { get; set; }
+
+        public virtual DbSet<EmpReimbursement> EmpReimbursement { get; set; }
+
         public virtual DbSet<LookUpDetailsM> LookUpDetailsM { get; set; }
         public virtual DbSet<EmpAddress> EmpAddress { get; set; }
         public virtual DbSet<CurrancyMaster> CurrancyMasters { get; set; }
@@ -266,7 +269,7 @@ namespace SwiftHR.Models
                     .HasColumnName("IFSCCODE");
             });
 
-           
+
             modelBuilder.Entity<LookUpM>(entity =>
             {
                 entity.ToTable("LookUpM");
@@ -315,28 +318,59 @@ namespace SwiftHR.Models
 
 
 
-             modelBuilder.Entity<EmpLOPDetails>(entity =>
+            modelBuilder.Entity<EmpLOPDetails>(entity =>
+           {
+               entity.ToTable("EmpLOPDetails");
+
+
+               entity.Property(e => e.EmployeeID)
+                   .HasMaxLength(250)
+                   .IsUnicode(false);
+
+               entity.Property(e => e.EmployeeNumber)
+                   .HasMaxLength(50)
+                   .IsUnicode(false);
+
+               entity.Property(e => e.EmployeeName)
+                   .HasMaxLength(20)
+                   .IsUnicode(false);
+
+               entity.Property(e => e.LOPMonth)
+                   .HasMaxLength(20)
+                   .IsUnicode(false);
+
+               entity.Property(e => e.TotalLOPDays)
+                   .HasMaxLength(20)
+                   .IsUnicode(false);
+
+               entity.Property(e => e.Remarks)
+                   .HasMaxLength(20)
+                   .IsUnicode(false);
+
+           });
+
+            modelBuilder.Entity<EmpReimbursement>(entity =>
             {
-                entity.ToTable("EmpLOPDetails");
+                entity.ToTable("EmpReimbursement");
 
 
-                entity.Property(e => e.EmployeeID)
+                entity.Property(e => e.EmployeeId)
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.EmployeeName)
                     .HasMaxLength(250)
                     .IsUnicode(false);
 
                 entity.Property(e => e.EmployeeNumber)
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Date)
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.EmployeeName)
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.LOPMonth)
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.TotalLOPDays)
+                entity.Property(e => e.Amount)
                     .HasMaxLength(20)
                     .IsUnicode(false);
 
@@ -344,8 +378,17 @@ namespace SwiftHR.Models
                     .HasMaxLength(20)
                     .IsUnicode(false);
 
-            });
 
+                entity.Property(e => e.CreatedDate)
+                      .HasMaxLength(20)
+                      .IsUnicode(false);
+
+
+                entity.Property(e => e.UpdatedDate)
+                      .HasMaxLength(20)
+                      .IsUnicode(false);
+
+            });
 
             modelBuilder.Entity<EmpAddress>(entity =>
             {
