@@ -10,6 +10,7 @@ namespace SwiftHR.Models
         public int AttandancePolicyId { get; set; }
         public string AttandancePolicyName { get; set; }
         public string Description { get; set; }
+
         public bool? IsActive { get; set; }
         public string CreatedDate { get; set; }
         public int? CreatedBy { get; set; }
