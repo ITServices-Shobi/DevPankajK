@@ -78,11 +78,18 @@ namespace SwiftHR.Controllers
         {
             EmpReimbursement ReimbursementMaster = new EmpReimbursement();
             //var result = policyMaster.EditPolicyMaster(Convert.ToInt32(policyId));
-            
-
             var result = (from a in _context.EmpReimbursement
                           where a.Id == Convert.ToInt32(EMPReimbID)
-                          select a ).ToList();
+                          select new {
+                              Id = a.Id,
+                              EmployeeId = a.EmployeeId,
+                              EmployeeNumber = a.EmployeeNumber,
+                              EmployeeName = a.EmployeeName,
+                              Date = string.Format("{0:yyyy-MM-dd}", a.Date),
+                                       Amount = a.Amount,
+                              Remarks = a.Remarks
+
+                          }).ToList();
 
             return new JsonResult(result);
             //ViewBag.Message = result;
