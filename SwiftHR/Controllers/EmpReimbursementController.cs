@@ -42,7 +42,26 @@ namespace SwiftHR.Controllers
 
             List<EmpReimbursement> ReimbursementDetailsList = new List<EmpReimbursement>();
 
-            ReimbursementDetailsList = _context.EmpReimbursement.Where(x => x.IsActive == false).ToList();
+            ReimbursementDetailsList = _context.EmpReimbursement.Where(x => x.IsActive == true)
+                .ToList();
+
+            var result = (from a in _context.EmpReimbursement
+                          where a.IsActive == true
+                          select new
+                          {
+                              Id = a.Id,
+                              EmployeeId = a.EmployeeId,
+                              EmployeeNumber = a.EmployeeNumber,
+                              EmployeeName = a.EmployeeName,
+                              Date = string.Format("{0:yyyy-MM-dd}", a.Date),
+                              PaymentEffectedDate = string.Format("{0:yyyy-MM-dd}", a.PaymentEffectedDate),
+                              Status = a.Status,
+                              Amount = a.Amount,
+                              Remarks = a.Remarks
+
+                          }).ToList();
+
+            
             ViewBag.ReimbursementList = ReimbursementDetailsList;
 
             return View("Index", EmpReimbursementMaster);
@@ -61,7 +80,7 @@ namespace SwiftHR.Controllers
 
                 List<EmpReimbursement> ReimbursementList = new List<EmpReimbursement>();
 
-                ReimbursementList = _context.EmpReimbursement.Where(x => x.IsActive == false).ToList();
+                ReimbursementList = _context.EmpReimbursement.Where(x => x.IsActive == true).ToList();
                 ViewBag.ReimbursementList = ReimbursementList;
 
                 return View("Index", ReimbursementMaster);
@@ -79,14 +98,16 @@ namespace SwiftHR.Controllers
             EmpReimbursement ReimbursementMaster = new EmpReimbursement();
             //var result = policyMaster.EditPolicyMaster(Convert.ToInt32(policyId));
             var result = (from a in _context.EmpReimbursement
-                          where a.Id == Convert.ToInt32(EMPReimbID)
+                          where a.Id == Convert.ToInt32(EMPReimbID) && a.IsActive==true
                           select new {
                               Id = a.Id,
                               EmployeeId = a.EmployeeId,
                               EmployeeNumber = a.EmployeeNumber,
                               EmployeeName = a.EmployeeName,
                               Date = string.Format("{0:yyyy-MM-dd}", a.Date),
-                                       Amount = a.Amount,
+                              PaymentEffectedDate=string.Format("{0:yyyy-MM-dd}", a.PaymentEffectedDate),
+                              Status=a.Status,
+                              Amount = a.Amount,
                               Remarks = a.Remarks
 
                           }).ToList();
@@ -107,7 +128,7 @@ namespace SwiftHR.Controllers
 
             List<EmpReimbursement> ReimbursementDetailsList = new List<EmpReimbursement>();
 
-            ReimbursementDetailsList = _context.EmpReimbursement.Where(x => x.IsActive == false).ToList();
+            ReimbursementDetailsList = _context.EmpReimbursement.Where(x => x.IsActive == true).ToList();
             ViewBag.ReimbursementList = ReimbursementDetailsList;
             return View("Index", ReimbursementMaster);
 
