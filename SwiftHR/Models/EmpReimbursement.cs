@@ -12,14 +12,18 @@ namespace SwiftHR.Models
         public int EmployeeNumber { get; set; }
         public string EmployeeName { get; set; }
         public DateTime Date { get; set; }
+        public DateTime PaymentEffectedDate { get; set; }
         public decimal Amount { get; set; }
         public string Remarks { get; set; }
+        public string Status { get; set; }
+        public int ApprovedBy { get; set; }
+        public DateTime? ApprovedDate { get; set; }
         public bool? IsActive { get; set; }
-        public string CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
         public int? CreatedBy { get; set; }
 
         public int? UpdatedBy { get; set; }
-        public string UpdatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
 
     }
 }

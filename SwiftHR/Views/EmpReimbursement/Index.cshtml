@@ -125,6 +125,15 @@
                                     <div class="col-md-4">
                                         <div class="box-body">
                                             <div class="form-group">
+                                                <label for="dtEffectedDate">Payment Effected Date<span style="color:#FF0000;">*</span></label>
+                                                <input class="form-control" name="EffectedDate" type="date" id="dtEffectedDate">
+                                            </div>
+                                        </div>
+                                        <!-- /.box-body -->
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="box-body">
+                                            <div class="form-group">
                                                 <label for="txtRemarks">Remarks</label>
                                                 <input type="text" id="txtRemarks" class="form-control" name="Remarks" placeholder="Remarks">
                                             </div>
@@ -156,7 +165,9 @@
                                                                 <th class="bg-primary"> Employee</th>
                                                                 <th class="bg-primary">Date</th>
                                                                 <th class="bg-primary"> Amount</th>
-                                                                <th class="bg-primary"> Remark</th>
+                                                                <th class="bg-primary">Status</th>
+                                                                <th class="bg-primary">EffectedDate</th>
+                                                                <th class="bg-primary">Remark</th>
                                                                 <th class="bg-primary"> Action</th>
                                                             </tr>
                                                         </thead>
@@ -168,12 +179,22 @@
                                                                         @Html.DisplayFor(modelItem => data.EmployeeNumber)
                                                                     </td>
                                                                     <td>@Html.DisplayFor(modelItem => data.EmployeeName) </td>
-                                                                    <td>@Html.DisplayFor(modelItem => data.Date) </td>
-                                                                    <td>@Html.DisplayFor(modelItem => data.Amount) </td>
+                                                                    <td>@Html.DisplayFor(modelItem => data.Date)</td>
+                                                                    <td>@Html.DisplayFor(modelItem => data.Amount)</td>
+                                                                    <td>@Html.DisplayFor(modelItem => data.Status)</td>
+                                                                    <td>@Html.DisplayFor(modelItem => data.PaymentEffectedDate)</td>
                                                                     <td>@Html.DisplayFor(modelItem => data.Remarks) </td>
                                                                     <td>
-                                                                        <a type="submit" href="" class="btn btn-primary pull-left btn-xs" style="float: left; margin-right: 4%;" onclick="SearchRecord(@data.Id);"><i id="" class="fa fa-edit"></i> Edit</a>
-                                                                        <button type="submit" class="btn btn-danger pull-left btn-xs" style="float: right; margin-right: 4%;" onclick="LOPDataDelete(@data.Id);"><i id="" class="fa fa-remove"></i> Disccable</button>
+                                                                        @if (@data.Status == "Apply")
+                                                                        {
+                                                                            <a type="submit" href="" class="btn btn-primary pull-left btn-xs" style="float: left; margin-right: 4%;" onclick="SearchRecord(@data.Id);"><i id="" class="fa fa-edit"></i> Edit</a>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            @*<a type="button" href="" class="btn btn-primary pull-left btn-xs" style="float: left; margin-right: 4%;" disabled><i id="" class="fa fa-edit"></i> Edit</a>*@
+                                                                        }
+
+                                                                    <button type="submit" class="btn btn-danger pull-left btn-xs" style="float: right; margin-right: 4%;" onclick="LOPDataDelete(@data.Id);"><i id="" class="fa fa-remove"></i> Disabled</button>
                                                                     </td>
 
                                                                 </tr>
@@ -181,12 +202,14 @@
                                                         </tbody>
                                                         <tfoot class="hidden-print">
                                                             <tr>
-                                                                <th>Employee No</th>
-                                                                <th>Employee</th>
+                                                                <th> Employee No</th>
+                                                                <th> Employee</th>
                                                                 <th>Date</th>
-                                                                <th>Amount</th>
+                                                                <th> Amount</th>
+                                                                <th>Status</th>
+                                                                <th>EffectedDate</th>
                                                                 <th>Remark</th>
-                                                                <th>Action</th>
+                                                                <th> Action</th>
                                                             </tr>
                                                         </tfoot>
                                                     }
@@ -293,8 +316,10 @@
                     $("#txtEmployeeId").val(response[0].employeeId);
                     $("#txtEmployeeNumber").val(response[0].employeeNumber);
                     $("#txtEmployeeName").val(response[0].employeeName);
-                   
+
                     $("#dtDate").val(response[0].date);
+                    $("#dtEffectedDate").val(response[0].paymentEffectedDate);
+
                     //$("#dtDate").format('dd-MM-yyyy').val('2021-12-21');
                     $("#txtAmount").val(response[0].amount);
                     $("#txtRemarks").val(response[0].remarks);
@@ -378,7 +403,6 @@
         </script>
     }
 
-    
     <script>
 
         $(document).ready(function () {
@@ -405,6 +429,11 @@
                 IsAnyEmpty = true;
                 alertMsg = alertMsg + "Amount <br />";
             }
+            if (document.getElementById("dtEffectedDate").value == "") {
+                IsAnyEmpty = true;
+                alertMsg = alertMsg + "Payment Effected Date <br />";
+            }
+
 
             if (IsAnyEmpty) {
 

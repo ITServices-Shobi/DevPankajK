@@ -108,7 +108,18 @@
                                         <div class="box-body">
                                             <div class="form-group">
                                                 <label for="txtLOPMonth">LOP Month<span style="color:#FF0000;">*</span> </label>
-                                                <input type="text" id="txtLOPMonth" class="form-control" name="LOPMonth" placeholder="LOP Month">
+                                                @*<input type="text" id="txtLOPMonth" class="form-control" name="LOPMonth" placeholder="LOP Month">*@
+                                            <select class="form-control select2" id="txtLOPMonth" name="LOPMonth">
+                                                <option value="0">Choose..</option>
+                                                @if (Model != null && Model.LoanTypeList.Count() > 0)
+                                                {
+                                                    @foreach (var user in Model.LoanTypeList)
+                                                    {
+                                                        <option value="@user.LookUpDetailsId">@user.Description</option>
+                                                    }
+                                                }
+                                            </select>
+
                                             </div>
                                         </div>
                                         <!-- /.box-body -->
@@ -434,8 +445,6 @@
             document.getElementById("txtRemarks").value = null;
             
         }
-
-
     </script>
     <script>
         $(document).ready(function () {
