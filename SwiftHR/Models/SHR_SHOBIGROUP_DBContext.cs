@@ -369,6 +369,10 @@ namespace SwiftHR.Models
                     .HasMaxLength(250)
                     .IsUnicode(false);
 
+                entity.Property(e => e.EarningsTypeFromLookUp)
+                   .HasMaxLength(250)
+                   .IsUnicode(false);
+
                 entity.Property(e => e.Date)
                     .HasMaxLength(50)
                     .IsUnicode(false);
