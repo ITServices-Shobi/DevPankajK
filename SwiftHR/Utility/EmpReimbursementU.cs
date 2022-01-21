@@ -19,6 +19,10 @@ namespace SwiftHR.Utility
         private static TimeZoneInfo IST_TIMEZONE = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
         public List<EmpReimbursement> ReimbursementDetailsList { get; set; }
         public List<Employee> EmployeeDetailsList { get; set; }
+
+        public List<LookUpDetailsM> EarningscomponentsList { get; set; }
+
+        public List<UspEmpReimbursementDetailsViewModel> EarningscomponentsListData { get; set; }
         public EmpReimbursementU()
         {
 
@@ -29,19 +33,20 @@ namespace SwiftHR.Utility
             int id = 0;
             EmpReimbursement ReimbursementList = new EmpReimbursement();
 
-            if (!string.IsNullOrEmpty(collection["EmployeeNumber"].ToString()))
+            if (!string.IsNullOrEmpty(collection["EmpCodeName"].ToString()))
             {
                 EmpReimbursement UpdateEmpReimbursement = new EmpReimbursement();
 
-                int ReimbId;
+                int ReimbId,EarningType;
                 int.TryParse(collection["ReimbursementId"], out ReimbId);
+                int.TryParse(collection["EarningType"], out EarningType);
                 int EmployeeID, EmpNO;
                 decimal Amt;
                 DateTime CreatedDate, Date, PaymentEffectedDate;
                 int.TryParse(collection["EmployeeID"], out EmployeeID);
 
-                int.TryParse(collection["EmployeeNumber"], out EmpNO);
-                int.TryParse(collection["ReimbursementId"], out ReimbId);
+                int.TryParse(collection["EmpCodeName"], out EmpNO);
+                int.TryParse(collection["Id"], out ReimbId);
                 DateTime.TryParse(collection["Date"], out Date);
                 DateTime.TryParse(collection["EffectedDate"], out PaymentEffectedDate);
 
@@ -63,6 +68,7 @@ namespace SwiftHR.Utility
                         ReimbursementList.EmployeeId = EmployeeID;
                         ReimbursementList.EmployeeNumber = EmpNO;
                         ReimbursementList.EmployeeName = collection["EmployeeName"];
+                        ReimbursementList.EarningsTypeFromLookUp = EarningType;
                         ReimbursementList.Date = Date;
                         ReimbursementList.Amount = Amt;
                         ReimbursementList.Remarks = collection["Remarks"];
@@ -99,8 +105,8 @@ namespace SwiftHR.Utility
                         UpdateEmpReimbursement.Amount = Amt;
                         UpdateEmpReimbursement.Remarks = collection["Remarks"];
                         UpdateEmpReimbursement.IsActive = true;
-                        //UpdateEmpReimbursement.UpdatedDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, IST_TIMEZONE).ToString("dd-MM-yyyy");
-                        //UpdateEmpReimbursement.UpdatedBy = 1;
+                        UpdateEmpReimbursement.UpdatedDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, IST_TIMEZONE);
+                        UpdateEmpReimbursement.UpdatedBy = 1;
 
                         entities.EmpReimbursement.Update(UpdateEmpReimbursement);
                         entities.SaveChanges();
@@ -272,6 +278,60 @@ namespace SwiftHR.Utility
                 flag = 0;
             }
             return ds;
+        }
+
+        public DataSet GetReimbursementDetails(string EmployeeId,string ReimbId, string connstring)
+        {
+            DataSet ds = new DataSet();
+            int flag = 0;
+            try
+            {
+                SqlConnection con = new SqlConnection(connstring);
+                con.Open();
+                SqlCommand cmd = new SqlCommand("EmpReimbursementDetails", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@EmpId", EmployeeId);
+                cmd.Parameters.AddWithValue("@Id", ReimbId);
+                cmd.CommandTimeout = 150000;
+                using (var da = new SqlDataAdapter(cmd))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    da.Fill(ds);
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+                flag = 0;
+            }
+            return ds;
+        }
+
+        public string DeleteReimbusment(int ReimbId)
+        {
+            string Message = "";
+            try
+            {
+                var Record = (from a in _context.EmpReimbursement
+                              where a.Id == ReimbId
+                              select a).FirstOrDefault();
+
+                EmpReimbursement Reimbu = new EmpReimbursement();
+                Reimbu = Record;
+                Reimbu.IsActive = false;
+                using (SHR_SHOBIGROUP_DBContext entities = new SHR_SHOBIGROUP_DBContext())
+                {
+                    entities.EmpReimbursement.Update(Reimbu);
+                    entities.SaveChanges();
+                }
+                Message = string.Format("Record Deleted Successfully!! {0}.\\n Date: {1}", Reimbu.EmployeeName, TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, IST_TIMEZONE).ToString("dd-MM-yyyy"));
+            }
+            catch (Exception ex)
+            {
+                Message = "Record Cannot be Deleted!!";
+            }
+
+            return Message;
         }
 
     }
