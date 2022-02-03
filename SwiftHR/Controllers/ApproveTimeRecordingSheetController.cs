@@ -287,5 +287,7 @@ namespace SwiftHR.Controllers
 
             return Json(new { Result = employeeList });
         }
+
+
     }
 }
